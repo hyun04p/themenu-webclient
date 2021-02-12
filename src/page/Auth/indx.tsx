@@ -17,8 +17,11 @@ const AuthRouter: React.FC<props> = (props) => {
     (state: RootState) => state.Auth.guest.isTimestampValid
   );
 
+  console.log(queryString);
+
   if (queryString.cRed !== undefined) {
     dispatch(AuthAction.authenticateGuest({ info: queryString.cRed }));
+    setTimeout(() => {}, 3000);
   } else {
   }
 
