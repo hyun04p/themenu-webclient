@@ -21,6 +21,10 @@ const RootRouter: React.FC<props> = (props) => {
     dispatch(AuthAction.renewGuestTimestamp());
   };
 
+  const TestPage = () => {
+    return <div>test page</div>;
+  };
+
   return (
     <div id="AppContainer" onTouchStart={handleOnTouchStart}>
       <Router>
@@ -28,6 +32,7 @@ const RootRouter: React.FC<props> = (props) => {
         <Route path="/order" component={OrderPage} />
         <Route path="/explore" component={ExporePage} />
         <Route path="/auth" component={AuthRouter} />
+        <Route path="/test" component={TestPage} />
       </Router>
     </div>
   );
