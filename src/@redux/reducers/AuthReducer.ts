@@ -46,10 +46,7 @@ const AuthReducer: Reducer<Auth> = (state = initialState, action) => {
     case AuthAction.Types.SET_LOADING:
       return {
         ...state,
-        guest: {
-          ...state.guest,
-          loading: payload.loading,
-        },
+        loading: payload.loading,
       };
 
     default:

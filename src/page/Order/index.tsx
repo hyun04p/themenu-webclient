@@ -3,7 +3,7 @@ import './index.scss';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 interface props {}
 
@@ -22,7 +22,7 @@ const OrderPage: React.FC<props> = (props) => {
     const now = new Date();
     const ts = new Date(timestamp);
     const until = ts.getTime() + 0.5 * 60000;
-    setRemaining(`${(until - now.getTime()) / 1000} 초 남음`);
+    setRemaining(`${Math.floor((until - now.getTime()) / 1000)} 초 남음`);
   };
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const OrderPage: React.FC<props> = (props) => {
     return () => {
       clearInterval(id);
     };
-  }, []);
+  }, [timestamp]);
 
   return (
     <>
@@ -41,6 +41,7 @@ const OrderPage: React.FC<props> = (props) => {
             <h3>timer</h3>
             <p>{remaining}</p>
           </div>
+          <Link to="/explore">explore</Link>
         </div>
       ) : (
         <Redirect to={{ pathname: '/explore' }} />

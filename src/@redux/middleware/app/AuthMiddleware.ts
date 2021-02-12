@@ -24,6 +24,7 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
     // Authenticate
     // update store if authenticated
     dispatch(AuthAction.registerGuestTimestamp());
+    dispatch(AuthAction.setLoading({ loading: false }));
   }
 
   /**

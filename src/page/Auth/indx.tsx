@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,21 +13,25 @@ const AuthRouter: React.FC<props> = (props) => {
   const dispatch = useDispatch();
   const queryString = useQueryString();
 
-  const isTimestampValid = useSelector(
-    (state: RootState) => state.Auth.guest.isTimestampValid
-  );
+  const auth = useSelector((state: RootState) => state.Auth);
 
-  console.log(queryString);
+  useEffect(() => {
+    console.log(auth);
+  });
 
-  if (queryString.cRed !== undefined) {
-    dispatch(AuthAction.authenticateGuest({ info: queryString.cRed }));
-    setTimeout(() => {}, 3000);
-  } else {
-  }
+  useEffect(() => {
+    if (queryString.cRed !== undefined) {
+      dispatch(AuthAction.authenticateGuest({ info: queryString.cRed }));
+    } else {
+      dispatch(AuthAction.setLoading({ loading: false }));
+    }
+  }, []);
 
   return (
     <>
-      {isTimestampValid ? (
+      {auth.loading ? (
+        <div>loading</div>
+      ) : auth.guest.isTimestampValid ? (
         <Redirect to={{ pathname: '/order' }} />
       ) : (
         <Redirect to={{ pathname: '/explore' }} />
