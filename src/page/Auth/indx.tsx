@@ -25,19 +25,15 @@ const AuthRouter: React.FC<props> = (props) => {
   } else {
   }
 
-  const AuthRedirect = () => {
-    return (
-      <>
-        {isTimestampValid ? (
-          <Redirect to={{ pathname: '/order' }} />
-        ) : (
-          <Redirect to={{ pathname: '/explore' }} />
-        )}
-      </>
-    );
-  };
-
-  return <>{<AuthRedirect />}</>;
+  return (
+    <>
+      {isTimestampValid ? (
+        <Redirect to={{ pathname: '/order' }} />
+      ) : (
+        <Redirect to={{ pathname: '/explore' }} />
+      )}
+    </>
+  );
 };
 
 export default AuthRouter;
