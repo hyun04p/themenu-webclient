@@ -17,11 +17,27 @@ const initialState: UI = {
 };
 
 const UIReducer: Reducer<UI> = (state = initialState, action) => {
+  const { payload } = action;
+
   switch (action.type) {
     case UIAction.Types.SET_GLOBAL_LOADING:
       return {
         ...state,
-        isGlobalLoading: action.payload.isLoading,
+        isGlobalLoading: payload.isLoading,
+      };
+
+    case UIAction.Types.QUEUE_NOTIFICATION:
+      return {
+        ...state,
+        notificationQueue: [payload.notification, ...state.notificationQueue],
+      };
+
+    case UIAction.Types.POP_NOTIFICATION:
+      const newQueue = [...state.notificationQueue];
+      newQueue.pop();
+      return {
+        ...state,
+        notificationQueue: newQueue,
       };
 
     default:

@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryString } from 'util/Location';
+import { Location } from '@util';
 import { AuthAction } from '@redux/actions';
 import { Redirect } from 'react-router-dom';
 import { RootState } from '@redux';
@@ -11,7 +11,7 @@ interface props {}
 
 const AuthRouter: React.FC<props> = (props) => {
   const dispatch = useDispatch();
-  const queryString = useQueryString();
+  const queryString = Location.useQueryString();
 
   const auth = useSelector((state: RootState) => state.Auth);
 

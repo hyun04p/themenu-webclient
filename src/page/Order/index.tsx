@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@redux';
 import { Link, Redirect } from 'react-router-dom';
+import OrderPage from './OrderPage';
+import { UIAction } from '@redux/actions';
+import { Notifications } from '@util';
 
 interface props {}
 
-const OrderPage: React.FC<props> = (props) => {
+const OrderRouter: React.FC<props> = (props) => {
+  const dispatch = useDispatch();
   const [remaining, setRemaining] = useState('');
 
   const isTimestampValid = useSelector(
@@ -32,17 +36,24 @@ const OrderPage: React.FC<props> = (props) => {
     };
   }, [timestamp]);
 
+  useEffect(() => {
+    if (!isTimestampValid) {
+      dispatch(UIAction.queueNotification(Notifications.INVALID_ORDER_URL));
+    }
+  }, []);
+
   return (
     <>
       {isTimestampValid ? (
-        <div className="OrderPage">
-          OrderPage
-          <div>
-            <h3>timer</h3>
-            <p>{remaining}</p>
-          </div>
-          <Link to="/explore">explore</Link>
-        </div>
+        // <div className="OrderPage">
+        //   OrderPage
+        //   <div>
+        //     <h3>timer</h3>
+        //     <p>{remaining}</p>
+        //   </div>
+        //   <Link to="/explore">explore</Link>
+        // </div>
+        <OrderPage />
       ) : (
         <Redirect to={{ pathname: '/explore' }} />
       )}
@@ -50,4 +61,4 @@ const OrderPage: React.FC<props> = (props) => {
   );
 };
 
-export default OrderPage;
+export default OrderRouter;

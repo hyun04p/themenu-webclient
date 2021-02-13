@@ -1,7 +1,7 @@
 import RootRouter from 'page';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.scss';
 
 import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';

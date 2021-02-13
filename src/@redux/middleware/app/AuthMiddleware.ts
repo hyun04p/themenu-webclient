@@ -1,20 +1,10 @@
-import { RootState } from '@redux';
-import { Action } from '@redux/Types';
-import { AuthAction } from '@redux/actions';
+import { Action, MiddlewareParam } from '@redux/Types';
+import { AuthAction, UIAction } from '@redux/actions';
+import { Const, Notifications } from '@util';
 
-interface param {
-  dispatch: any;
-  getState: () => RootState;
-}
-
-const TIMESTAMP_VALID_FOR = 0.5;
-enum LocalStorageKey {
-  GUEST_TIME_STAMP = 'guesttimestamp',
-}
-
-const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
-  action: Action
-) => {
+const AuthMiddleware = ({ dispatch, getState }: MiddlewareParam) => (
+  next: any
+) => (action: Action) => {
   next(action);
 
   /**
@@ -63,7 +53,10 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
   if (AuthAction.Types.PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE === action.type) {
     const guest = getState().Auth.guest;
     if (guest.isTimestampValid)
-      localStorage.setItem(LocalStorageKey.GUEST_TIME_STAMP, guest.timestamp);
+      localStorage.setItem(
+        Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP,
+        guest.timestamp
+      );
   }
 
   /**
@@ -71,7 +64,7 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
    */
   if (AuthAction.Types.RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE === action.type) {
     const retrievedTimestamp = localStorage.getItem(
-      LocalStorageKey.GUEST_TIME_STAMP
+      Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP
     );
 
     // If timestamp field exists in localstorage
@@ -79,7 +72,7 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
       const now = new Date();
       const timestamp = new Date(retrievedTimestamp);
       const validUntil = new Date(
-        timestamp.getTime() + TIMESTAMP_VALID_FOR * 60000
+        timestamp.getTime() + Const.TIMESTAMP_VALID_FOR_MIN * 60000
       );
       // retrieved timestamp is valid
       if (validUntil.getTime() > now.getTime()) {
@@ -89,7 +82,7 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
         dispatch(AuthAction.setGuestIsTimestampValid({ isValid: true }));
         dispatch(AuthAction.initGuestTimestampObserver());
       } else {
-        localStorage.removeItem(LocalStorageKey.GUEST_TIME_STAMP);
+        localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
       }
     }
   }
@@ -102,9 +95,8 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
       const timestamp = new Date(getState().Auth.guest.timestamp);
       const now = new Date();
       const validUntil = new Date(
-        timestamp.getTime() + TIMESTAMP_VALID_FOR * 60000
+        timestamp.getTime() + Const.TIMESTAMP_VALID_FOR_MIN * 60000
       );
-      console.log('observing');
       const isTimestampValid = getState().Auth.guest.isTimestampValid;
 
       if (now.getTime() < validUntil.getTime()) {
@@ -116,7 +108,8 @@ const AuthMiddleware = ({ dispatch, getState }: param) => (next: any) => (
       else {
         dispatch(AuthAction.setGuestIsTimestampValid({ isValid: false }));
         dispatch(AuthAction.setGuestTimestamp({ timestamp: '' }));
-        localStorage.removeItem(LocalStorageKey.GUEST_TIME_STAMP);
+        localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
+        dispatch(UIAction.queueNotification(Notifications.INVALID_ORDER_URL));
         clearInterval(id);
       }
     }, 2000);

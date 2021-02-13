@@ -1,5 +1,4 @@
 import { ActionCreator } from '@redux/Types';
-import { Action } from 'redux';
 
 export enum Types {
   // SETTERS
