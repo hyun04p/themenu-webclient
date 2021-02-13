@@ -3,7 +3,7 @@ import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import OrderPage from './OrderPage';
 import { UIAction } from '@redux/actions';
 import { Notifications } from '@util';
@@ -16,6 +16,14 @@ const OrderRouter: React.FC<props> = (props) => {
 
   const isTimestampValid = useSelector(
     (state: RootState) => state.Auth.guest.isTimestampValid
+  );
+
+  const isOrdererValid = useSelector(
+    (state: RootState) => state.Order.orderer.isValid
+  );
+
+  const isOrdererLoading = useSelector(
+    (state: RootState) => state.Order.orderer.loading
   );
 
   const timestamp = useSelector(
@@ -44,7 +52,9 @@ const OrderRouter: React.FC<props> = (props) => {
 
   return (
     <>
-      {isTimestampValid ? (
+      {isOrdererLoading ? (
+        <div>loading</div>
+      ) : isTimestampValid && isOrdererValid ? (
         // <div className="OrderPage">
         //   OrderPage
         //   <div>

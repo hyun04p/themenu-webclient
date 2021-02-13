@@ -3,7 +3,7 @@ import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Location } from '@util';
-import { AuthAction } from '@redux/actions';
+import { AuthAction, OrderAction } from '@redux/actions';
 import { Redirect } from 'react-router-dom';
 import { RootState } from '@redux';
 
@@ -20,9 +20,26 @@ const AuthRouter: React.FC<props> = (props) => {
   });
 
   useEffect(() => {
-    if (queryString.cRed !== undefined) {
+    if (
+      queryString.cRed !== undefined &&
+      queryString.tBn !== undefined &&
+      queryString.sn !== undefined &&
+      queryString.cRed !== null &&
+      queryString.tBn !== null &&
+      queryString.sn !== null
+    ) {
+      const storeId = queryString.cRed.toString();
+      const tableNum = parseInt(queryString.tBn.toString());
+      const seatNum = parseInt(queryString.sn.toString());
+      dispatch(
+        OrderAction.fetchStore({
+          orderer: { storeId: storeId, tableNum: tableNum, seatNum: seatNum },
+        })
+      );
+
       dispatch(AuthAction.authenticateGuest({ info: queryString.cRed }));
     } else {
+      dispatch(OrderAction.setLoading(false));
       dispatch(AuthAction.setLoading({ loading: false }));
     }
   }, []);

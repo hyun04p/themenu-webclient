@@ -3,6 +3,7 @@ import qs from 'query-string';
 
 export const useQueryString = () => {
   const location = useLocation();
-
-  return qs.parse(location.search);
+  const ret = qs.parse(location.search);
+  console.log(ret);
+  return ret;
 };

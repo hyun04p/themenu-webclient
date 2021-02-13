@@ -3,6 +3,13 @@ import { Action } from '../Types';
 
 export interface Order {
   // tableNum: number;
+  orderer: {
+    isValid: boolean;
+    loading: boolean;
+    storeId: string;
+    tableNum: number;
+    seatNum: number;
+  };
   store: {
     information: {
       name: string;
@@ -41,6 +48,13 @@ interface Item {
 }
 
 const initialState: Order = {
+  orderer: {
+    isValid: false,
+    loading: true,
+    storeId: '',
+    tableNum: -1,
+    seatNum: -1,
+  },
   store: {
     information: {
       name: '',
@@ -62,7 +76,32 @@ const OrderReducer = (state = initialState, action: Action) => {
     case OrderAction.Types.SET_STORE:
       return {
         ...state,
-        store: payload.store,
+        store: {
+          ...state.store,
+          information: payload.information,
+          menu: payload.menu,
+        },
+      };
+
+    case OrderAction.Types.SET_ORDERER:
+      return {
+        ...state,
+        orderer: {
+          ...state.orderer,
+          storeId: payload.storeId,
+          tableNum: payload.tableNum,
+          seatNum: payload.seatNum,
+          isValid: true,
+        },
+      };
+
+    case OrderAction.Types.SET_LOADING:
+      return {
+        ...state,
+        orderer: {
+          ...state.orderer,
+          loading: payload.loading,
+        },
       };
 
     default:
