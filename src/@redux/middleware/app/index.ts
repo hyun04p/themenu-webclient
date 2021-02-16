@@ -1,5 +1,6 @@
+import routeMiddleware from './RouteMiddleware';
 import authMiddleware from './AuthMiddleware';
 
-const appMiddleware = [...authMiddleware];
+const appMiddleware = [...routeMiddleware, ...authMiddleware];
 
 export default appMiddleware;

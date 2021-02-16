@@ -6,6 +6,17 @@
 
 // dark ver.
 $primary-theme: #ee5340;
-$primary-bg: #0d171a; //PANTONE  20-0194 TPM
+// $primary-bg: #0d171a; //PANTONE  20-0194 TPM
+$primary-bg: #111;
 
 $primary-text: #fff;
+
+$navbar-height: 70px;
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

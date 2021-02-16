@@ -1,8 +1,6 @@
-import { RootState } from '@redux';
 import { AuthAction } from '@redux/actions';
 import { MiddlewareParam } from '@redux/Types';
 import { Const } from '@util';
-import { timeStamp } from 'console';
 
 import { Middleware } from 'redux';
 

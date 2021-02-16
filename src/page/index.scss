@@ -1,5 +1,15 @@
+@import '@util/config.scss';
+
 #AppContainer {
   width: 100vw;
   height: 100vh;
   background-color: #eee;
+
+  overflow: hidden;
+
+  #contentContainer {
+    height: calc(100vh - #{$navbar-height});
+    overflow: scroll;
+    // background-color: #f00;
+  }
 }

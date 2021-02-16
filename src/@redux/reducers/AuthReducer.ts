@@ -20,7 +20,10 @@ const initialState: Auth = {
 /**
  * @AuthRudcer
  */
-const AuthReducer = (state = initialState, action: AuthAction.ActionTypes) => {
+const AuthReducer = (
+  state = initialState,
+  action: AuthAction.ActionTypes
+): Auth => {
   console.log('auth reducer', action.type);
   switch (action.type) {
     case AuthAction.Types.SET_GUEST_TIMESTAMP:

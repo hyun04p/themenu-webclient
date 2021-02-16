@@ -11,34 +11,40 @@ const ExporePage: React.FC<props> = (props) => {
   const dispatch = useDispatch();
   const [coord, setCoord] = useState({ x: 0, y: 0 });
 
+  const places = ['하남 돼지', 'bowl room'];
+
   return (
-    <div className="ExplorePage">
-      ExporePage
-      <Link to="/order">order</Link>
-      <div>
-        <h3>위치</h3>
-        <p>{`x: ${coord.x}\ny: ${coord.y}`}</p>
-      </div>
-      <div
-        onClick={() => {
-          setTimeout(() => {
-            dispatch(
-              UIAction.queueNotification({
-                notification: { title: 'test noti2', content: 'good2' },
-              })
-            );
-          }, 2000);
-          dispatch(
-            UIAction.queueNotification({
-              notification: { title: 'test noti', content: 'good' },
-            })
-          );
-        }}
-      >
-        notify
-      </div>
-      <br />
-      <div>dispatch</div>
+    <div className="ExplorePage hide-scrollbar">
+      {/* <div className="contentContainer"> */}
+      {places.map((place, index) => {
+        return (
+          <PlaceView key={place} index={index}>
+            {place}
+          </PlaceView>
+        );
+      })}
+      {/* </div> */}
+    </div>
+  );
+};
+
+interface PlaceViewProps {
+  index: number;
+}
+const PlaceView: React.FC<PlaceViewProps> = (props) => {
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: props.index % 2 === 0 ? '#fff' : '#eee',
+      }}
+      className="element"
+    >
+      {props.children}
     </div>
   );
 };

@@ -1,3 +1,4 @@
 import GlobalNotificationModal from './GlobalNotificationModal';
+import Navbar from './Navbar';
 
-export { GlobalNotificationModal };
+export { GlobalNotificationModal, Navbar };

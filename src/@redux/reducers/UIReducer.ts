@@ -8,15 +8,17 @@ interface Notification {
 
 export interface UI {
   isGlobalLoading: boolean;
+  isRouting: boolean;
   notificationQueue: Notification[];
 }
 
 const initialState: UI = {
   isGlobalLoading: true,
+  isRouting: false,
   notificationQueue: [],
 };
 
-const UIReducer = (state = initialState, action: Action) => {
+const UIReducer = (state = initialState, action: Action): UI => {
   const { payload } = action;
 
   switch (action.type) {
@@ -38,6 +40,18 @@ const UIReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         notificationQueue: newQueue,
+      };
+
+    case UIAction.Types.BEGIN_ROUTING:
+      return {
+        ...state,
+        isRouting: true,
+      };
+
+    case UIAction.Types.FINISH_ROUTING:
+      return {
+        ...state,
+        isRouting: false,
       };
 
     default:

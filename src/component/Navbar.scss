@@ -1,0 +1,14 @@
+@import '@util/config.scss';
+
+.Navbar {
+  width: 100%;
+  height: $navbar-height;
+  background-color: #111;
+  color: #fff;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  border-top: 1px #555 solid;
+}
