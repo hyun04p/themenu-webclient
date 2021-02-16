@@ -70,40 +70,7 @@ const initialState: Order = {
 };
 
 const OrderReducer = (state = initialState, action: Action) => {
-  const { payload } = action;
-
   switch (action.type) {
-    case OrderAction.Types.SET_STORE:
-      return {
-        ...state,
-        store: {
-          ...state.store,
-          information: payload.information,
-          menu: payload.menu,
-        },
-      };
-
-    case OrderAction.Types.SET_ORDERER:
-      return {
-        ...state,
-        orderer: {
-          ...state.orderer,
-          storeId: payload.storeId,
-          tableNum: payload.tableNum,
-          seatNum: payload.seatNum,
-          isValid: true,
-        },
-      };
-
-    case OrderAction.Types.SET_LOADING:
-      return {
-        ...state,
-        orderer: {
-          ...state.orderer,
-          loading: payload.loading,
-        },
-      };
-
     default:
       return state;
   }

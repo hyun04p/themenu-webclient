@@ -1,6 +1,5 @@
-import AuthMiddleware from './AuthMiddleware';
-import OrderMiddleware from './OrderMiddleware';
+import authMiddleware from './AuthMiddleware';
 
-const AppMiddleware = [AuthMiddleware, OrderMiddleware];
+const appMiddleware = [...authMiddleware];
 
-export default AppMiddleware;
+export default appMiddleware;

@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import OrderRouter from 'page/Order';
 import ExporePage from 'page/Explore';
 import HomeRouter from 'page/Home';
-import AuthRouter from 'page/Auth/indx';
-import { useDispatch } from 'react-redux';
+import AuthRouter from 'page/Auth';
+import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from '@redux/actions';
 import { GlobalNotificationModal } from 'component';
 

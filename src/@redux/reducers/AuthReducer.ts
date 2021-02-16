@@ -1,36 +1,35 @@
 import { AuthAction } from '@redux/actions';
-import { Action, Reducer } from '@redux/Types';
+import { act } from 'react-dom/test-utils';
 
 export interface Auth {
   mode: 'guest' | 'auth';
-  loading: boolean;
   guest: {
-    timestamp: string;
+    timestamp: number;
     isTimestampValid: boolean;
-    observerId: number;
   };
 }
 
 const initialState: Auth = {
   mode: 'guest',
-  loading: true,
   guest: {
-    timestamp: '',
+    timestamp: -1,
     isTimestampValid: false,
-    observerId: -1,
   },
 };
 
-const AuthReducer: Reducer<Auth> = (state = initialState, action) => {
-  const { payload } = action;
-
+/**
+ * @AuthRudcer
+ */
+const AuthReducer = (state = initialState, action: AuthAction.ActionTypes) => {
+  console.log('auth reducer', action.type);
   switch (action.type) {
     case AuthAction.Types.SET_GUEST_TIMESTAMP:
+      console.log('new timestamp: ', action.payload.timestamp);
       return {
         ...state,
         guest: {
           ...state.guest,
-          timestamp: payload.timestamp,
+          timestamp: action.payload.timestamp,
         },
       };
 
@@ -39,14 +38,8 @@ const AuthReducer: Reducer<Auth> = (state = initialState, action) => {
         ...state,
         guest: {
           ...state.guest,
-          isTimestampValid: payload.isValid,
+          isTimestampValid: action.payload.isValid,
         },
-      };
-
-    case AuthAction.Types.SET_LOADING:
-      return {
-        ...state,
-        loading: payload.loading,
       };
 
     default:

@@ -1,114 +1,154 @@
-import { ActionCreator } from '@redux/Types';
-
 export enum Types {
   // SETTERS
   SET_MODE = '[Auth] set auth mode',
   SET_GUEST_TIMESTAMP = '[Auth] set timestamp for guest user',
   SET_GUEST_TIMESTAMP_VALID = '[Auth] set isTimestampValid for guest user ',
-  SET_LOADING = '[Auth] set loading',
   // COMMANDS
   POPULATE = '[Auth] populate',
   RENEW_GUEST_TIMESTAMP = '[Auth] renew timestamp',
   INIT_GUEST_TIMESTAMP_OBSERVER = '[Auth] init timestamp observer',
-  DESTROY_GUEST_TIMESTAMP_OBSERVER = '[Auth] destroy timestamp observer',
-  AUTHENTICATE_GUEST = '[Auth] authenticate guest',
   REGISTER_GUEST_TIMESTAMP = '[Auth] register guest timestamp',
   PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE = '[Auth] persist guest user timestamp to localstorage',
   RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE = '[Auth] retrieve guest timestamp from localstorage',
 }
 
-export const setAuthMode: ActionCreator<{ newMode: 'guest' | 'auth' }> = (
-  newMode
-) => {
+/**
+ *
+ */
+interface setAuthModeAction {
+  type: Types.SET_MODE;
+  payload: {
+    mode: 'guest' | 'auth';
+  };
+}
+export const setAuthMode = (newMode: 'guest' | 'auth') => {
   return {
     type: Types.SET_MODE,
     payload: { mode: newMode },
   };
 };
 
-export const setGuestTimestamp: ActionCreator<{ timestamp: string }> = (
-  param
-) => {
+/**
+ *
+ */
+interface setGuestTimestampAction {
+  type: Types.SET_GUEST_TIMESTAMP;
+  payload: {
+    timestamp: number;
+  };
+}
+export const setGuestTimestamp = (timestamp?: number) => {
   return {
     type: Types.SET_GUEST_TIMESTAMP,
     payload: {
-      timestamp: param.timestamp,
+      timestamp: timestamp,
     },
   };
 };
 
-export const setGuestIsTimestampValid: ActionCreator<{
-  isValid: boolean;
-}> = (param) => {
+/**
+ *
+ */
+interface setGuestIsTimestampValidAction {
+  type: Types.SET_GUEST_TIMESTAMP_VALID;
+  payload: {
+    isValid: boolean;
+  };
+}
+export const setGuestIsTimestampValid = (isValid: boolean) => {
   return {
     type: Types.SET_GUEST_TIMESTAMP_VALID,
     payload: {
-      isValid: param.isValid,
+      isValid: isValid,
     },
   };
 };
 
-export const renewGuestTimestamp: ActionCreator<void> = () => {
+/**
+ *
+ */
+interface renewGuestTimestampAction {
+  type: Types.RENEW_GUEST_TIMESTAMP;
+  meta: {
+    throttle: number;
+  };
+}
+export const renewGuestTimestamp = () => {
   return {
     type: Types.RENEW_GUEST_TIMESTAMP,
-    payload: null,
-  };
-};
-
-export const initGuestTimestampObserver: ActionCreator<void> = () => {
-  return {
-    type: Types.INIT_GUEST_TIMESTAMP_OBSERVER,
-    payload: null,
-  };
-};
-
-export const destroyGuestTimestampObserver: ActionCreator<void> = () => {
-  return {
-    type: Types.DESTROY_GUEST_TIMESTAMP_OBSERVER,
-    payload: null,
-  };
-};
-
-export const setLoading: ActionCreator<{ loading: boolean }> = (param) => {
-  return {
-    type: Types.SET_LOADING,
-    payload: {
-      loading: param.loading,
+    meta: {
+      throttle: 5000,
     },
   };
 };
 
-export const authenticateGuest: ActionCreator<{ info: any }> = (param) => {
+/**
+ *
+ */
+interface initGuestTimestampObserverAction {
+  type: Types.INIT_GUEST_TIMESTAMP_OBSERVER;
+}
+export const initGuestTimestampObserver = () => {
   return {
-    type: Types.AUTHENTICATE_GUEST,
-    payload: param.info,
+    type: Types.INIT_GUEST_TIMESTAMP_OBSERVER,
   };
 };
 
-export const persistGuestTimestampLocalstorage: ActionCreator<void> = () => {
+/**
+ *
+ */
+interface persistGuestTimestampLocalstorageAction {
+  type: Types.PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE;
+}
+export const persistGuestTimestampLocalstorage = () => {
   return {
     type: Types.PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE,
-    payload: null,
   };
 };
 
-export const retrieveGuestTimestampLocalstorage: ActionCreator<void> = () => {
+/**
+ *
+ */
+interface retrieveGuestTimestampLocalstorageAction {
+  type: Types.RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE;
+}
+export const retrieveGuestTimestampLocalstorage = () => {
   return {
     type: Types.RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE,
-    payload: null,
   };
 };
 
-export const registerGuestTimestamp: ActionCreator<void> = () => {
+/**
+ *
+ */
+interface registerGuestTimestampAction {
+  type: Types.REGISTER_GUEST_TIMESTAMP;
+}
+export const registerGuestTimestamp = () => {
   return {
     type: Types.REGISTER_GUEST_TIMESTAMP,
-    payload: null,
   };
 };
 
-export const populateAuth: ActionCreator<void> = () => {
+/**
+ *
+ */
+interface populateAuthAction {
+  type: Types.POPULATE;
+}
+export const populateAuth = () => {
   return {
     type: Types.POPULATE,
-    payload: null,
   };
 };
+
+export type ActionTypes =
+  | setAuthModeAction
+  | setGuestTimestampAction
+  | setGuestIsTimestampValidAction
+  | renewGuestTimestampAction
+  | initGuestTimestampObserverAction
+  | persistGuestTimestampLocalstorageAction
+  | retrieveGuestTimestampLocalstorageAction
+  | registerGuestTimestampAction
+  | populateAuthAction;

@@ -1,119 +1,147 @@
-import { Action, MiddlewareParam } from '@redux/Types';
-import { AuthAction, UIAction } from '@redux/actions';
-import { Const, Notifications } from '@util';
+import { RootState } from '@redux';
+import { AuthAction } from '@redux/actions';
+import { MiddlewareParam } from '@redux/Types';
+import { Const } from '@util';
+import { timeStamp } from 'console';
 
-const AuthMiddleware = ({ dispatch, getState }: MiddlewareParam) => (
-  next: any
-) => (action: Action) => {
-  next(action);
+import { Middleware } from 'redux';
 
-  /**
-   *
-   */
-  if (AuthAction.Types.AUTHENTICATE_GUEST === action.type) {
-    // Authenticate
-    // update store if authenticated
-    dispatch(AuthAction.registerGuestTimestamp());
-    dispatch(AuthAction.setLoading({ loading: false }));
+/**
+ *
+ */
+const renewGuestTimestamp: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.RENEW_GUEST_TIMESTAMP) {
+    return next(action);
   }
+  if (!getState().Auth.guest.isTimestampValid) return;
 
-  /**
-   *
-   */
-  if (AuthAction.Types.POPULATE === action.type) {
-    dispatch(AuthAction.retrieveGuestTimestampLocalstorage());
-  }
-
-  /**
-   *
-   */
-  if (AuthAction.Types.REGISTER_GUEST_TIMESTAMP === action.type) {
-    const now = new Date();
-    dispatch(AuthAction.setGuestTimestamp({ timestamp: now.toISOString() }));
-    dispatch(AuthAction.setGuestIsTimestampValid({ isValid: true }));
-    dispatch(AuthAction.persistGuestTimestampLocalstorage());
-    dispatch(AuthAction.initGuestTimestampObserver());
-  }
-
-  /**
-   *
-   */
-  if (AuthAction.Types.RENEW_GUEST_TIMESTAMP === action.type) {
-    const now = new Date();
-
-    if (getState().Auth.guest.isTimestampValid) {
-      dispatch(AuthAction.setGuestTimestamp({ timestamp: now.toISOString() }));
-      dispatch(AuthAction.persistGuestTimestampLocalstorage());
-    }
-  }
-
-  /**
-   *
-   */
-  if (AuthAction.Types.PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE === action.type) {
-    const guest = getState().Auth.guest;
-    if (guest.isTimestampValid)
-      localStorage.setItem(
-        Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP,
-        guest.timestamp
-      );
-  }
-
-  /**
-   *
-   */
-  if (AuthAction.Types.RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE === action.type) {
-    const retrievedTimestamp = localStorage.getItem(
-      Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP
-    );
-
-    // If timestamp field exists in localstorage
-    if (retrievedTimestamp !== null) {
-      const now = new Date();
-      const timestamp = new Date(retrievedTimestamp);
-      const validUntil = new Date(
-        timestamp.getTime() + Const.TIMESTAMP_VALID_FOR_MIN * 60000
-      );
-      // retrieved timestamp is valid
-      if (validUntil.getTime() > now.getTime()) {
-        dispatch(
-          AuthAction.setGuestTimestamp({ timestamp: timestamp.toISOString() })
-        );
-        dispatch(AuthAction.setGuestIsTimestampValid({ isValid: true }));
-        dispatch(AuthAction.initGuestTimestampObserver());
-      } else {
-        localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
-      }
-    }
-  }
-
-  /**
-   *
-   */
-  if (AuthAction.Types.INIT_GUEST_TIMESTAMP_OBSERVER === action.type) {
-    const id = setInterval(() => {
-      const timestamp = new Date(getState().Auth.guest.timestamp);
-      const now = new Date();
-      const validUntil = new Date(
-        timestamp.getTime() + Const.TIMESTAMP_VALID_FOR_MIN * 60000
-      );
-      const isTimestampValid = getState().Auth.guest.isTimestampValid;
-
-      if (now.getTime() < validUntil.getTime()) {
-        if (!isTimestampValid) {
-          dispatch(AuthAction.setGuestIsTimestampValid({ isValid: true }));
-        }
-      }
-      // Timestamp no longer valid => set isValid false and
-      else {
-        dispatch(AuthAction.setGuestIsTimestampValid({ isValid: false }));
-        dispatch(AuthAction.setGuestTimestamp({ timestamp: '' }));
-        localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
-        dispatch(UIAction.queueNotification(Notifications.INVALID_ORDER_URL));
-        clearInterval(id);
-      }
-    }, 2000);
-  }
+  dispatch(AuthAction.setGuestTimestamp());
+  dispatch(AuthAction.persistGuestTimestampLocalstorage());
 };
 
-export default AuthMiddleware;
+const setGuestTimestamp: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.SET_GUEST_TIMESTAMP) {
+    return next(action);
+  }
+
+  if (!action.payload.timestamp) {
+    const now = new Date();
+    const timestamp = now.getTime() + Const.TIMESTAMP_VALID_FOR_MIN * 60000;
+    action.payload.timestamp = timestamp;
+    return next(action);
+  }
+
+  next(action);
+};
+
+/**
+ *
+ */
+const registerGuestTimestamp: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.REGISTER_GUEST_TIMESTAMP) {
+    return next(action);
+  }
+
+  next(action);
+  dispatch(AuthAction.setGuestTimestamp());
+  dispatch(AuthAction.setGuestIsTimestampValid(true));
+  dispatch(AuthAction.persistGuestTimestampLocalstorage());
+  dispatch(AuthAction.initGuestTimestampObserver());
+};
+
+/**
+ *
+ */
+const initGuestTimestampObserver: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.INIT_GUEST_TIMESTAMP_OBSERVER) {
+    return next(action);
+  }
+
+  const observerId = setInterval(() => {
+    const now = new Date().getTime();
+    const timestamp = getState().Auth.guest.timestamp;
+
+    if (timestamp < now) {
+      dispatch(AuthAction.setGuestIsTimestampValid(false));
+      clearInterval(observerId);
+    }
+  }, 2000);
+
+  next(action);
+};
+
+/**
+ *
+ */
+const persisGuestTimestampLocalstorage: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE)
+    return next(action);
+
+  const timestamp = getState().Auth.guest.timestamp;
+  localStorage.setItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP, '' + timestamp);
+  next(action);
+};
+
+/**
+ *
+ */
+const retrieveGuestTimestampLocalstorage: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE)
+    return next(action);
+
+  const timestampStr = localStorage.getItem(
+    Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP
+  );
+
+  if (timestampStr === null) return;
+
+  const timestamp = parseInt(timestampStr);
+  const now = new Date().getTime();
+
+  if (timestamp > now) {
+    dispatch(AuthAction.registerGuestTimestamp());
+  } else {
+    localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
+  }
+  next(action);
+};
+
+/**
+ *
+ */
+const populate: Middleware = ({ dispatch, getState }: MiddlewareParam) => (
+  next
+) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.POPULATE) return next(action);
+
+  dispatch(AuthAction.retrieveGuestTimestampLocalstorage());
+};
+
+const authMiddleware = [
+  renewGuestTimestamp,
+  registerGuestTimestamp,
+  initGuestTimestampObserver,
+  setGuestTimestamp,
+  persisGuestTimestampLocalstorage,
+  retrieveGuestTimestampLocalstorage,
+  populate,
+];
+export default authMiddleware;

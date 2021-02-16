@@ -16,7 +16,7 @@ const initialState: UI = {
   notificationQueue: [],
 };
 
-const UIReducer: Reducer<UI> = (state = initialState, action) => {
+const UIReducer = (state = initialState, action: Action) => {
   const { payload } = action;
 
   switch (action.type) {

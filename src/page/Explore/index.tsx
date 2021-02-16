@@ -11,19 +11,8 @@ const ExporePage: React.FC<props> = (props) => {
   const dispatch = useDispatch();
   const [coord, setCoord] = useState({ x: 0, y: 0 });
 
-  // useEffect(() => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition((position) =>
-  //       setCoord({
-  //         x: position.coords.latitude,
-  //         y: position.coords.longitude,
-  //       })
-  //     );
-  //   }
-  // });
-
   return (
-    <div>
+    <div className="ExplorePage">
       ExporePage
       <Link to="/order">order</Link>
       <div>
@@ -48,6 +37,8 @@ const ExporePage: React.FC<props> = (props) => {
       >
         notify
       </div>
+      <br />
+      <div>dispatch</div>
     </div>
   );
 };

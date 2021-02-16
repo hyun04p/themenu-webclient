@@ -1,25 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import AppMiddleware from './middleware/app';
-import UIReducer, { UI } from './reducers/UIReducer';
-import AuthReducer, { Auth } from './reducers/AuthReducer';
-import OrderReducer, { Order } from './reducers/OrderReducer';
-
-const reducer = combineReducers({
-  UI: UIReducer,
-  Auth: AuthReducer,
-  Order: OrderReducer,
-});
+import middleware from '@redux/middleware';
+import reducer, { RootState } from '@redux/reducers';
 
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(...AppMiddleware))
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
-export interface RootState {
-  UI: UI;
-  Auth: Auth;
-  Order: Order;
-}
-
+export type { RootState };
 export default store;
