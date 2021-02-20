@@ -1,4 +1,4 @@
-import { AuthAction } from '@redux/actions';
+import { AuthAction } from '@store/actions';
 import { act } from 'react-dom/test-utils';
 
 export interface Auth {
@@ -24,7 +24,6 @@ const AuthReducer = (
   state = initialState,
   action: AuthAction.ActionTypes
 ): Auth => {
-  console.log('auth reducer', action.type);
   switch (action.type) {
     case AuthAction.Types.SET_GUEST_TIMESTAMP:
       console.log('new timestamp: ', action.payload.timestamp);

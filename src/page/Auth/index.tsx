@@ -3,9 +3,9 @@ import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Location, Notifications } from '@util';
-import { AuthAction, OrderAction, UIAction } from '@redux/actions';
+import { AuthAction, OrderAction, UIAction } from '@store/actions';
 import { useHistory } from 'react-router-dom';
-import { RootState } from '@redux';
+import { RootState } from '@store';
 
 interface props {}
 
@@ -27,15 +27,21 @@ const AuthRouter: React.FC<props> = (props) => {
   };
 
   useEffect(() => {
-    if (validateQueryString(qs, ['cRed', 'tBn', 'sn'])) {
-      let { cRed, tBn, sn } = qs;
-      cRed = '' + cRed;
+    const qsExists = validateQueryString(qs, ['cRed', 'tBn', 'sn']);
+    let { cRed, tBn, sn } = qs;
+    cRed = '' + cRed;
+    tBn = parseInt('' + tBn);
+    sn = parseInt('' + sn);
+
+    if (qsExists && !isNaN(sn) && !isNaN(tBn)) {
       dispatch(AuthAction.registerGuestTimestamp());
-      history.push('/order');
+      dispatch(OrderAction.setOrderer(cRed, tBn, sn));
+      dispatch(UIAction.routeTo('/order', history));
     } else {
       // qs invalid
+      dispatch(AuthAction.unregisterGuestTimestamp());
       dispatch(UIAction.queueNotification(Notifications.INVALID_ORDER_URL));
-      history.push('/explore');
+      dispatch(UIAction.routeTo('/explore', history));
     }
   }, []);
 

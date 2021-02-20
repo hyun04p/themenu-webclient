@@ -3,7 +3,7 @@ import './Navbar.scss';
 
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { UIAction } from '@redux/actions';
+import { UIAction } from '@store/actions';
 
 interface props {}
 

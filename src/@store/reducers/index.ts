@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import AuthReducer, { Auth } from './AuthReducer';
 import OrderReducer, { Order } from './OrderReducer';
+// import orderReducer from '@store/order';
 import UIReducer, { UI } from './UIReducer';
 
 const reducer = combineReducers({

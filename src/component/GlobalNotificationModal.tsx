@@ -3,8 +3,8 @@ import './GlobalNotificationModal.scss';
 
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@redux';
-import { UIAction } from '@redux/actions';
+import { RootState } from '@store';
+import { UIAction } from '@store/actions';
 
 interface props {}
 

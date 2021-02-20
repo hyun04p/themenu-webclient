@@ -15,7 +15,14 @@
     left: 0;
     width: 100%;
     height: 50px;
-    background-color: #00000000;
+    background-color: #00000099;
+
+    font-size: 2rem;
+    padding: 10px;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
   }
 
   .posterContainer {
@@ -31,18 +38,21 @@
       width: 100%;
       height: 200px;
       background: linear-gradient(#ee534000, $primary-bg);
+      z-index: 50;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
     }
+  }
+
+  .contentContainer {
+    width: 100%;
+    // height: 1000px;
+    margin-bottom: 50px;
   }
 
   h3 {
     margin: 0;
-  }
-
-  .footer {
-    width: 100%;
-    height: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }

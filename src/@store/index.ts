@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import middleware from '@redux/middleware';
-import reducer, { RootState } from '@redux/reducers';
+import middleware from '@store/middleware';
+import reducer, { RootState } from '@store/reducers';
 
 const store = createStore(
   reducer,

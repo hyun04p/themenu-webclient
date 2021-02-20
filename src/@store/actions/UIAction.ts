@@ -1,4 +1,4 @@
-import { ActionCreator } from '@redux/Types';
+import { ActionCreator } from '@store/Types';
 import { TypeFormatFlags } from 'typescript';
 
 export enum Types {

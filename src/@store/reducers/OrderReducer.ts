@@ -1,12 +1,12 @@
-import { OrderAction } from '@redux/actions';
+import { OrderAction } from '@store/actions';
+import { act } from 'react-dom/test-utils';
 import { Action } from '../Types';
 
 export interface Order {
   // tableNum: number;
   orderer: {
     isValid: boolean;
-    loading: boolean;
-    storeId: string;
+    storeId: string | undefined;
     tableNum: number;
     seatNum: number;
   };
@@ -15,11 +15,12 @@ export interface Order {
       name: string;
       address: string;
       phone: string;
+      table_count: number;
     };
     menu: {
-      categories: Category[];
+      categories: string[];
       option_groups: OptionGroup[];
-      items: Item[];
+      items: {};
     };
   };
 }
@@ -49,9 +50,8 @@ interface Item {
 
 const initialState: Order = {
   orderer: {
-    isValid: false,
-    loading: true,
-    storeId: '',
+    isValid: true,
+    storeId: undefined,
     tableNum: -1,
     seatNum: -1,
   },
@@ -60,17 +60,47 @@ const initialState: Order = {
       name: '',
       address: '',
       phone: '',
+      table_count: 0,
     },
     menu: {
       categories: [],
       option_groups: [],
-      items: [],
+      items: {},
     },
   },
 };
 
-const OrderReducer = (state = initialState, action: Action) => {
+const OrderReducer = (
+  state = initialState,
+  action: OrderAction.ActionTypes
+): Order => {
   switch (action.type) {
+    case OrderAction.Types.SET_ORDERER:
+      return {
+        ...state,
+        orderer: {
+          ...state.orderer,
+          storeId: action.payload.storeId,
+          tableNum: action.payload.tableNum,
+          seatNum: action.payload.seatNum,
+        },
+      };
+
+    case OrderAction.Types.SET_STORE:
+      return {
+        ...state,
+        store: action.payload.store,
+      };
+
+    case OrderAction.Types.SET_IS_ORDERER_VALID:
+      return {
+        ...state,
+        orderer: {
+          ...state.orderer,
+          isValid: action.payload.isValid,
+        },
+      };
+
     default:
       return state;
   }

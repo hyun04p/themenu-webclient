@@ -1,5 +1,5 @@
-import { AuthAction } from '@redux/actions';
-import { MiddlewareParam } from '@redux/Types';
+import { AuthAction, OrderAction } from '@store/actions';
+import { MiddlewareParam } from '@store/Types';
 import { Const } from '@util';
 
 import { Middleware } from 'redux';
@@ -56,6 +56,20 @@ const registerGuestTimestamp: Middleware = ({
   dispatch(AuthAction.initGuestTimestampObserver());
 };
 
+const unregisterGuestTimestamp: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: AuthAction.ActionTypes) => {
+  if (action.type !== AuthAction.Types.UNREGISTER_GUEST_TIMESTAMP)
+    return next(action);
+
+  dispatch(AuthAction.setGuestTimestamp(-1));
+  localStorage.removeItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP);
+  dispatch(AuthAction.setGuestIsTimestampValid(false));
+
+  next(action);
+};
+
 /**
  *
  */
@@ -72,7 +86,8 @@ const initGuestTimestampObserver: Middleware = ({
     const timestamp = getState().Auth.guest.timestamp;
 
     if (timestamp < now) {
-      dispatch(AuthAction.setGuestIsTimestampValid(false));
+      dispatch(AuthAction.unregisterGuestTimestamp());
+      // dispatch(AuthAction.setGuestIsTimestampValid(false));
       clearInterval(observerId);
     }
   }, 2000);
@@ -129,13 +144,14 @@ const populate: Middleware = ({ dispatch, getState }: MiddlewareParam) => (
   next
 ) => (action: AuthAction.ActionTypes) => {
   if (action.type !== AuthAction.Types.POPULATE) return next(action);
-
+  dispatch(OrderAction.retreiveOrdererLocalstorage());
   dispatch(AuthAction.retrieveGuestTimestampLocalstorage());
 };
 
 const authMiddleware = [
   renewGuestTimestamp,
   registerGuestTimestamp,
+  unregisterGuestTimestamp,
   initGuestTimestampObserver,
   setGuestTimestamp,
   persisGuestTimestampLocalstorage,

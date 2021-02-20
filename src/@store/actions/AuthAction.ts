@@ -8,6 +8,7 @@ export enum Types {
   RENEW_GUEST_TIMESTAMP = '[Auth] renew timestamp',
   INIT_GUEST_TIMESTAMP_OBSERVER = '[Auth] init timestamp observer',
   REGISTER_GUEST_TIMESTAMP = '[Auth] register guest timestamp',
+  UNREGISTER_GUEST_TIMESTAMP = '[Auth] unregister guest timestamp',
   PERSIST_GUEST_TIMESTAMP_LOCALSTORAGE = '[Auth] persist guest user timestamp to localstorage',
   RETRIEVE_GUEST_TIMESTAMP_LOCALSTORAGE = '[Auth] retrieve guest timestamp from localstorage',
 }
@@ -133,6 +134,18 @@ export const registerGuestTimestamp = () => {
 /**
  *
  */
+interface unregisterGuestTimestampAction {
+  type: Types.UNREGISTER_GUEST_TIMESTAMP;
+}
+export const unregisterGuestTimestamp = () => {
+  return {
+    type: Types.UNREGISTER_GUEST_TIMESTAMP,
+  };
+};
+
+/**
+ *
+ */
 interface populateAuthAction {
   type: Types.POPULATE;
 }
@@ -151,4 +164,5 @@ export type ActionTypes =
   | persistGuestTimestampLocalstorageAction
   | retrieveGuestTimestampLocalstorageAction
   | registerGuestTimestampAction
+  | unregisterGuestTimestampAction
   | populateAuthAction;

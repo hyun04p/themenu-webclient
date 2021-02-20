@@ -1,4 +1,4 @@
-import { RootState } from '@redux';
+import { RootState } from '@store';
 
 export type ActionCreator<T> = (param: T) => { type: string; payload: any };
 

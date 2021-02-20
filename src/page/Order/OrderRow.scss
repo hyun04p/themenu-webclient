@@ -1,0 +1,33 @@
+@import '@util/config.scss';
+
+.OrderRow {
+  height: 200px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  h3 {
+    align-self: start;
+  }
+
+  .tileContainer {
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+
+    box-sizing: border-box;
+    padding: 10px 15px 10px 0px;
+
+    .menuTile {
+      display: inline-block;
+      width: 130px;
+      height: 100%;
+      background-color: #555;
+      margin-left: 15px;
+    }
+  }
+}

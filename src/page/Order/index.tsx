@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './index.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@redux';
+import { RootState } from '@store';
 import { useHistory } from 'react-router-dom';
 import OrderPage from './OrderPage';
-import { UIAction } from '@redux/actions';
+import { UIAction } from '@store/actions';
 import { Notifications } from '@util';
 
 interface props {}
@@ -26,6 +26,8 @@ const OrderRouter: React.FC<props> = (props) => {
     }
     setLoading(false);
   }, [isTimestampValid]);
+
+  console.log('rendering order router');
 
   return loading ? <div></div> : <OrderPage />;
 };

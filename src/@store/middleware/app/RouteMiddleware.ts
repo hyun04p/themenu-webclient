@@ -1,5 +1,5 @@
-import { UIAction } from '@redux/actions';
-import { MiddlewareParam } from '@redux/Types';
+import { UIAction } from '@store/actions';
+import { MiddlewareParam } from '@store/Types';
 import { Notifications } from '@util';
 import { Middleware } from 'redux';
 

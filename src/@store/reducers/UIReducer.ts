@@ -1,5 +1,5 @@
-import { UIAction } from '@redux/actions';
-import { Action, Reducer } from '@redux/Types';
+import { UIAction } from '@store/actions';
+import { Action, Reducer } from '@store/Types';
 
 interface Notification {
   title: string;
