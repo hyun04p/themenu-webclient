@@ -11,7 +11,75 @@ export enum Types {
   SET_IS_ORDERER_VALID = '[Order] set isOrdererValid',
   PERSIST_ORDERER_LOCALSTORAGE = '[Order] persist orderer localstorage',
   RETREIVE_ORDERER_LOCALSTORAGE = '[Order] retreive orderer localstorage',
+  SHOW_MENU_DETAIL_MODAL = '[Order] show menu detial modal',
+  HIDE_MENU_DETAIL_MODAL = '[Order] hide menu detail modal',
+  PUT_ITEM_TO_BUCKET = '[Order] put item to bucket',
 }
+
+/**
+ *
+ */
+interface BucketOption {
+  name: string;
+  price: number;
+}
+interface putItemToBucketAction {
+  type: Types.PUT_ITEM_TO_BUCKET;
+  payload: {
+    id: string;
+    itemId: string;
+    count: number;
+    options: BucketOption[];
+  };
+}
+export const putItemToBucket = (
+  id: string,
+  itemId: string,
+  count: number,
+  options: BucketOption[]
+): putItemToBucketAction => {
+  return {
+    type: Types.PUT_ITEM_TO_BUCKET,
+    payload: {
+      id: id,
+      itemId: itemId,
+      count: count,
+      options: options,
+    },
+  };
+};
+
+/**
+ *
+ */
+interface showMenuDetailModalAction {
+  type: Types.SHOW_MENU_DETAIL_MODAL;
+  payload: {
+    itemId: string;
+  };
+}
+export const showMenuDetailModal = (
+  itemId: string
+): showMenuDetailModalAction => {
+  return {
+    type: Types.SHOW_MENU_DETAIL_MODAL,
+    payload: {
+      itemId: itemId,
+    },
+  };
+};
+
+/**
+ *
+ */
+interface hideMenuDetailModalAction {
+  type: Types.HIDE_MENU_DETAIL_MODAL;
+}
+export const hideMenuDetailModal = (): hideMenuDetailModalAction => {
+  return {
+    type: Types.HIDE_MENU_DETAIL_MODAL,
+  };
+};
 
 /**
  *
@@ -80,10 +148,16 @@ export const setIsOrdererValid = (
  */
 interface fetchStoreAction {
   type: Types.FETCH_STORE;
+  meta: {
+    throttle: number;
+  };
 }
 export const fetchStore = (): fetchStoreAction => {
   return {
     type: Types.FETCH_STORE,
+    meta: {
+      throttle: 30000,
+    },
   };
 };
 
@@ -130,4 +204,7 @@ export type ActionTypes =
   | fetchStoreAction
   | fetchOrderAction
   | persistOrdererLocalstorageAction
-  | retreiveOrdererLocalstorageAction;
+  | retreiveOrdererLocalstorageAction
+  | showMenuDetailModalAction
+  | hideMenuDetailModalAction
+  | putItemToBucketAction;

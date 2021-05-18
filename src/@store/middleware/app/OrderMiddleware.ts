@@ -4,6 +4,7 @@ import { OrderAction, UIAction } from '@store/actions';
 import { Action, MiddlewareParam } from '@store/Types';
 import { Const, Notifications } from '@util';
 import { Middleware } from 'redux';
+import md5 from 'md5';
 
 const fetchStore: Middleware = ({ dispatch, getState }: MiddlewareParam) => (
   next
@@ -11,7 +12,7 @@ const fetchStore: Middleware = ({ dispatch, getState }: MiddlewareParam) => (
   if (action.type !== OrderAction.Types.FETCH_STORE) return next(action);
 
   const storeId = getState().Order.orderer.storeId;
-  console.log('[fetchOrder md] with storeId: ', storeId);
+  console.log('[fetchStore md] with storeId: ', storeId);
 
   if (!storeId) {
     dispatch(OrderAction.setIsOrdererValid(false));
@@ -60,6 +61,32 @@ const fetchOrder: Middleware = ({ dispatch, getState }: MiddlewareParam) => (
 
       // valid query string =>
     });
+
+  next(action);
+};
+
+/**
+ *
+ */
+const putItemToBucket: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareParam) => (next) => (action: OrderAction.ActionTypes) => {
+  if (action.type !== OrderAction.Types.PUT_ITEM_TO_BUCKET) return next(action);
+
+  // if exists, merge
+
+  const { itemId, options } = action.payload;
+  const sortedOption = [...options];
+  sortedOption.sort((a, b) => (a.name > b.name ? 1 : -1));
+  const id = md5(itemId + JSON.stringify(sortedOption));
+  action.payload.id = id;
+  // else
+  // if (getState().Order.order.bucket[action.payload.id] !== undefined) {
+  //   // add
+  // } else {
+  //   // merge
+  // }
 
   next(action);
 };
@@ -127,5 +154,6 @@ const orderMiddleware = [
   fetchOrder,
   persistOrdererLocalstorage,
   retreiveOrdererLocalstorage,
+  putItemToBucket,
 ];
 export default orderMiddleware;

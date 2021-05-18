@@ -1,9 +1,42 @@
 import { OrderAction } from '@store/actions';
-import { act } from 'react-dom/test-utils';
-import { Action } from '../Types';
 
+/**
+ * @MenuRelatedTypes
+ */
+interface Item {
+  id: string;
+  price: number;
+  description: string;
+  categories: string[];
+  option_groups: string[];
+  available: boolean;
+}
+interface OptionGroup {
+  id: string;
+  max_select: number;
+  min_select: number;
+  options: Option[];
+}
+interface Option {
+  name: string;
+  price: number;
+  availabe: boolean;
+}
+interface BucketOption {
+  name: string; // '[option_gourp_id] option_id'
+  price: number;
+}
+interface BucketElement {
+  id: string;
+  itemId: string;
+  count: number;
+  options: BucketOption[];
+}
+
+/**
+ * @OrderRootType
+ */
 export interface Order {
-  // tableNum: number;
   orderer: {
     isValid: boolean;
     storeId: string | undefined;
@@ -19,33 +52,21 @@ export interface Order {
     };
     menu: {
       categories: string[];
-      option_groups: OptionGroup[];
-      items: {};
+      option_groups: {
+        byId: { [key: string]: OptionGroup };
+        allIds: string[];
+      };
+      items: {
+        byId: { [key: string]: Item };
+        allIds: string[];
+      };
     };
   };
-}
-
-interface Category {
-  name: string;
-  description: string;
-}
-interface Option {
-  name: string;
-  price: number;
-  is_available: boolean;
-}
-interface OptionGroup {
-  name: string;
-  max_select: number;
-  options: Option[];
-}
-interface Item {
-  name: string;
-  price: string;
-  description: string;
-  categories: string[];
-  option_groups: number[];
-  is_available: boolean;
+  order: {
+    detailModalId: string | undefined;
+    bucket: { [key: string]: BucketElement };
+    receipt: {};
+  };
 }
 
 const initialState: Order = {
@@ -64,9 +85,20 @@ const initialState: Order = {
     },
     menu: {
       categories: [],
-      option_groups: [],
-      items: {},
+      option_groups: {
+        byId: {},
+        allIds: [],
+      },
+      items: {
+        byId: {},
+        allIds: [],
+      },
     },
+  },
+  order: {
+    detailModalId: undefined,
+    bucket: {},
+    receipt: {},
   },
 };
 
@@ -100,6 +132,61 @@ const OrderReducer = (
           isValid: action.payload.isValid,
         },
       };
+
+    case OrderAction.Types.SHOW_MENU_DETAIL_MODAL:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          detailModalId: !state.order.detailModalId
+            ? action.payload.itemId
+            : state.order.detailModalId,
+        },
+      };
+
+    case OrderAction.Types.HIDE_MENU_DETAIL_MODAL:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          detailModalId: undefined,
+        },
+      };
+
+    case OrderAction.Types.PUT_ITEM_TO_BUCKET:
+      if (state.order.bucket[action.payload.id] !== undefined) {
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            bucket: {
+              ...state.order.bucket,
+              [action.payload.id]: {
+                ...state.order.bucket[action.payload.id],
+                count:
+                  state.order.bucket[action.payload.id].count +
+                  action.payload.count,
+              },
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+          order: {
+            ...state.order,
+            bucket: {
+              ...state.order.bucket,
+              [action.payload.id]: {
+                id: action.payload.id,
+                itemId: action.payload.itemId,
+                options: action.payload.options,
+                count: action.payload.count,
+              },
+            },
+          },
+        };
+      }
 
     default:
       return state;

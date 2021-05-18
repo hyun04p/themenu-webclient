@@ -78,7 +78,7 @@ export const renewGuestTimestamp = () => {
   return {
     type: Types.RENEW_GUEST_TIMESTAMP,
     meta: {
-      throttle: 5000,
+      throttle: 10000,
     },
   };
 };

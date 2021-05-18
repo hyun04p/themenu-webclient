@@ -107,7 +107,7 @@ const persisGuestTimestampLocalstorage: Middleware = ({
 
   const timestamp = getState().Auth.guest.timestamp;
   localStorage.setItem(Const.LOCALSTORAGE_KEY.GUEST_TIME_STAMP, '' + timestamp);
-  next(action);
+  // next(action);
 };
 
 /**

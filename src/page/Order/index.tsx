@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom';
 import OrderPage from './OrderPage';
 import { UIAction } from '@store/actions';
 import { Notifications } from '@util';
+import Modal from 'react-modal';
+import ShowDetailModal from './ShowDetailModal';
 
 interface props {}
 

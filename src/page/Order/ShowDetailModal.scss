@@ -1,0 +1,93 @@
+@import '@util/config.scss';
+
+.ShowDetailModalOveraly {
+  z-index: 200;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: flex-end;
+
+  .ShowDetailModal {
+    width: 100%;
+    background-color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+    padding: 20px;
+
+    .detailContainer {
+      height: 120px;
+      width: 100%;
+
+      display: flex;
+      .imgContainer {
+        border: 1px solid #555;
+        width: 120px;
+        height: 120px;
+      }
+      .infoContainer {
+        box-sizing: border-box;
+        padding: 5px 15px;
+
+        h3 {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .orderBtn {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .optionGroupSelector {
+      // height: calc(100vh - 120px);
+      flex: 1;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 20px 0;
+      .optionGroups {
+        .optionGroup {
+          width: 100%;
+          margin-bottom: 10px;
+          .name {
+            font-size: 2rem;
+          }
+          .optionContainer {
+            .optionBtn {
+              display: flex;
+              height: 40px;
+              justify-content: space-around;
+              align-items: center;
+            }
+          }
+        }
+      }
+    }
+
+    .hide {
+      display: none;
+    }
+  }
+
+  .detail {
+    height: 250px;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .order {
+    height: 100%;
+    border-radius: 0;
+  }
+}

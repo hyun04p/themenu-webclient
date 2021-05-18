@@ -16,8 +16,8 @@ const NavBtn: React.FC<btnProps> = (props) => {
   // const location = useLocation();
 
   const navigate = () => {
-    // history.push(props.to);
-    dispatch(UIAction.routeTo(props.to, history));
+    history.push(props.to);
+    // dispatch(UIAction.routeTo(props.to, history));
   };
 
   return <div onClick={navigate}>{props.children}</div>;
@@ -28,7 +28,7 @@ const Navbar: React.FC<props> = (props) => {
     <div className="Navbar">
       <NavBtn to="/explore">맛집 찾기</NavBtn>
       <NavBtn to="/order">주문</NavBtn>
-      <NavBtn to="/">프로필</NavBtn>
+      <NavBtn to="/profile">프로필</NavBtn>
     </div>
   );
 };

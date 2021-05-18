@@ -17,12 +17,19 @@
     height: 50px;
     background-color: #00000099;
 
-    font-size: 2rem;
+    box-sizing: border-box;
     padding: 10px;
     z-index: 100;
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    h3 {
+      font-size: 1.3rem;
+    }
+    div {
+    }
   }
 
   .posterContainer {

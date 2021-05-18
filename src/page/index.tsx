@@ -9,6 +9,7 @@ import AuthRouter from 'page/Auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from '@store/actions';
 import { GlobalNotificationModal, Navbar } from 'component';
+import ProfileRouter from 'page/Profile';
 
 interface props {}
 
@@ -42,7 +43,7 @@ const RootRouter: React.FC<props> = (props) => {
           />
           <Route path="/explore" component={ExporePage} />
           <Route path="/auth" component={AuthRouter} />
-          <Route path="/test" component={TestPage} />
+          <Route path="/profile" component={ProfileRouter} />
         </div>
         <Navbar />
         <GlobalNotificationModal />
